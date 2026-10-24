@@ -1,0 +1,102 @@
+# Controlled Demo connectivity acceptance only. Not a strategy PASS or profit test.
+symbols = ["BTCUSDT", "ETHUSDT"]
+poll_interval_seconds = 5
+log_level = "INFO"
+log_dir = "logs/testnet"
+
+[fees]
+spot_entry = "0.001"
+spot_exit = "0.001"
+perp_entry = "0.0005"
+perp_exit = "0.0005"
+
+[research]
+sqlite_path = "data/testnet/research.sqlite"
+timeout_seconds = 3
+formula_version = "v1-existing-math"
+config_version = "testnet-controlled-funding-acceptance-v1"
+
+[research.data_quality]
+max_data_age = "PT10S"
+max_sampling_skew = "PT2S"
+open_interest_time_semantics = "last_transaction"
+
+[research.sizing.BTCUSDT]
+target_quantity = "0.001"
+stress_reserve = "0"
+other_costs = "0"
+[research.sizing.BTCUSDT.spot_rules]
+step_size = "0.000001"
+[research.sizing.BTCUSDT.perp_rules]
+step_size = "0.000001"
+[research.sizing.ETHUSDT]
+target_quantity = "0.01"
+stress_reserve = "0"
+other_costs = "0"
+[research.sizing.ETHUSDT.spot_rules]
+step_size = "0.000001"
+[research.sizing.ETHUSDT.perp_rules]
+step_size = "0.000001"
+
+[research.scenarios.BTCUSDT]
+baseline = "reverse_execution"
+holding_seconds = 60 # Legacy fixed-window mode only; projection uses official next time.
+spot_exit_mid_mode = "entry_mid"
+convergence_exit_basis_pct = "0"
+adverse_exit_basis_mode = "entry_offset"
+adverse_exit_basis_pct = "0.01" # Stress widens ENTRY basis by 1 percentage point.
+funding_events = []
+[research.scenarios.BTCUSDT.funding_projection]
+mode = "next_settlement"
+positive_rate_multiplier = "0.5"
+max_wait_seconds = 86400
+exit_delay_seconds = 60
+min_entry_lead_seconds = 60
+entry_window_seconds = 900
+
+[research.scenarios.ETHUSDT]
+baseline = "reverse_execution"
+holding_seconds = 60
+spot_exit_mid_mode = "entry_mid"
+convergence_exit_basis_pct = "0"
+adverse_exit_basis_mode = "entry_offset"
+adverse_exit_basis_pct = "0.01"
+funding_events = []
+[research.scenarios.ETHUSDT.funding_projection]
+mode = "next_settlement"
+positive_rate_multiplier = "0.5"
+max_wait_seconds = 86400
+exit_delay_seconds = 60
+min_entry_lead_seconds = 60
+entry_window_seconds = 900
+
+[research.decision]
+min_baseline_net_profit = "0.01"
+min_baseline_net_return = "0.0001"
+max_stress_loss = "1"
+max_stress_loss_return = "0.02"
+min_convergence_profit = "0.1"
+min_scenario_margin = "0.1"
+[research.decision.decision]
+min_net_profit = "0.01"
+min_net_return = "0.0001"
+min_matched_notional = "1"
+max_residual_delta = "0"
+min_profit_buffer = "0.01"
+pass_net_profit = "0.1"
+pass_net_return = "0.001"
+
+[testnet]
+environment = "TESTNET"
+journal_path = "data/testnet/execution.sqlite" # Reuse journal to retain managed positions on restart.
+max_order_notional = "250"
+max_price_deviation = "0.001" # Bounded 10bps IOC price limit for this isolated connectivity test.
+collateral_buffer = "0.1"
+holding_seconds = 60 # Explicit round-trip acceptance; forecast trades persist their own deadline.
+max_active_pairs = 2
+max_total_attempts = 20
+timeout_seconds = 5
+max_exit_recovery_attempts = 2
+max_recovery_price_deviation = "0.001"
+funding_check_interval_seconds = 60
+funding_check_max_attempts = 5

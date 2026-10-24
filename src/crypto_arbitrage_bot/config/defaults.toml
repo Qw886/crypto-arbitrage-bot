@@ -1,0 +1,12 @@
+# Stage 1-4: poll settings are reserved data, no polling loop exists.
+symbols = ["BTCUSDT", "ETHUSDT"]
+poll_interval_seconds = 10
+log_level = "INFO"
+log_dir = "logs"
+
+[fees]
+# Fictional hand-calculation example only; not current Binance fee claims.
+spot_entry = "0.001"
+spot_exit = "0.002"
+perp_entry = "0.0005"
+perp_exit = "0.0008"

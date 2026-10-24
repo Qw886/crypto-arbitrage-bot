@@ -1,0 +1,6 @@
+-r requirements.txt
+pytest==9.1.1
+ruff==0.16.7
+mypy==2.3.1
+# Required by the recovery acceptance helpers' environment fingerprint.
+setuptools==84.0.0

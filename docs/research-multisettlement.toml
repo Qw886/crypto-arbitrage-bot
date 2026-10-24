@@ -1,0 +1,130 @@
+# Fixed-candidate multi-settlement OBSERVATION pilot. No orders or future income extrapolation.
+# THE/TST selected for further observation from archived seven-day Funding coverage only;
+# BTC/ETH are controls. Selection is not PASS. Entry is freshly collected after selection.
+# Original estimate remains a one-settlement hypothesis; 1d/3d/7d are OBSERVED validation horizons.
+# Public metadata candidates ONLY. No orders, no private API, no execution authorization.
+# Existing BTC/ETH fees, sizing, scenarios and decisions are retained verbatim from research-soak.toml.
+# candidate_cost_research reads public data and saves hypothetical research to this independent SQLite path.
+# The SQLite parent directory determines the default evidence directory.
+# Standard proxy environment / workstation policy is inherited unchanged.
+symbols = ["BTCUSDT", "ETHUSDT"]
+poll_interval_seconds = 30
+log_level = "INFO"
+log_dir = "logs/research/catalog"
+
+[fees]
+spot_entry = "0.001"
+spot_exit = "0.001"
+perp_entry = "0.0005"
+perp_exit = "0.0005"
+
+[research]
+sqlite_path = "data/research/multisettlement.sqlite"
+timeout_seconds = 3
+formula_version = "v1-existing-math"
+config_version = "candidate-multisettlement-observation-v1"
+
+[research.data_quality]
+max_data_age = "PT10S"
+max_sampling_skew = "PT2S"
+# Binance OI's official time is transaction time; local observation must remain fresh.
+open_interest_time_semantics = "last_transaction"
+
+[research.sizing.BTCUSDT]
+target_quantity = "0.001"
+stress_reserve = "0"
+other_costs = "0"
+[research.sizing.BTCUSDT.spot_rules]
+step_size = "0.000001"
+[research.sizing.BTCUSDT.perp_rules]
+step_size = "0.000001"
+
+[research.sizing.ETHUSDT]
+target_quantity = "0.01"
+stress_reserve = "0"
+other_costs = "0"
+[research.sizing.ETHUSDT.spot_rules]
+step_size = "0.000001"
+[research.sizing.ETHUSDT.perp_rules]
+step_size = "0.000001"
+
+[research.scenarios.BTCUSDT]
+baseline = "reverse_execution"
+holding_seconds = 60
+spot_exit_mid_mode = "entry_mid"
+convergence_exit_basis_pct = "0"
+adverse_exit_basis_pct = "0.01"
+funding_events = [] # Explicit hypothetical no-settlement scenario, never forward-validation history.
+[research.scenarios.ETHUSDT]
+baseline = "reverse_execution"
+holding_seconds = 60
+spot_exit_mid_mode = "entry_mid"
+convergence_exit_basis_pct = "0"
+adverse_exit_basis_pct = "0.01"
+funding_events = []
+
+[research.decision]
+min_baseline_net_profit = "0.01"
+min_baseline_net_return = "0.0001"
+max_stress_loss = "1"
+max_stress_loss_return = "0.02"
+min_convergence_profit = "0.1"
+min_scenario_margin = "0.1"
+[research.decision.decision]
+min_net_profit = "0.01"
+min_net_return = "0.0001"
+min_matched_notional = "1"
+max_residual_delta = "0"
+min_profit_buffer = "0.01"
+pass_net_profit = "0.1"
+pass_net_return = "0.001"
+
+[research.validation_scheduler]
+validation_horizons_seconds = [86400, 259200, 604800] # Actual future observations: 1d, 3d, 7d.
+batch_size = 10
+# Late restart/network observations must not stand in for the intended horizon.
+max_lateness_seconds = 300
+# Match the scheduled funding timestamp only; retain the actual event time for PnL.
+funding_time_tolerance_ms = 1000
+lease_seconds = 120
+max_attempts = 2
+funding_page_limit = 1000
+funding_max_pages = 2
+
+
+[research.candidate_catalog]
+# Explicit research safeguards; not exchange rules or profitability thresholds.
+min_perp_age_seconds = 604800
+min_remaining_lifetime_seconds = 2592000
+max_metadata_age_seconds = 180
+max_sampling_skew_seconds = 60
+blocked_assets = ["USDC", "FDUSD", "TUSD", "USDP", "DAI"]
+
+
+[research.funding_screen]
+max_candidates = 8
+benchmark_symbols = ["BTCUSDT", "ETHUSDT"]
+min_observed_funding_rate = "0"
+max_next_settlement_wait_seconds = 86400
+
+[research.candidate_economics]
+spot_budget = "100"
+capital_limit = "250"
+stress_reserve = "0"
+other_costs = "0"
+
+[research.candidate_economics.windows.next_settlement]
+baseline = "reverse_execution"
+holding_seconds = 86400
+spot_exit_mid_mode = "entry_mid"
+convergence_exit_basis_pct = "0"
+adverse_exit_basis_pct = "0.01"
+adverse_exit_basis_mode = "entry_offset"
+funding_events = []
+[research.candidate_economics.windows.next_settlement.funding_projection]
+mode = "next_settlement"
+positive_rate_multiplier = "0.5"
+max_wait_seconds = 86400
+exit_delay_seconds = 60
+min_entry_lead_seconds = 60
+entry_window_seconds = 86400

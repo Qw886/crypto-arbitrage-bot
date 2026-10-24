@@ -1,0 +1,32 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.env
+# Local credentials; keep the public configuration example.
+.env.*
+!.env.example
+*.dpapi
+
+# Generated validation output at the project root (not tests/ source code).
+/.test-tmp*/
+/.pair-test-tmp/
+/.pytest-work-*/
+/pytest-cache-files-*/
+
+# Local IDE state and backup copies are not release source.
+/.idea/
+/backups/
+
+logs/*
+!logs/.gitkeep
+data/*
+!data/.gitkeep
+!data/exports/
+data/exports/*
+!data/exports/.gitkeep

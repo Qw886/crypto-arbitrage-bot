@@ -1,0 +1,3 @@
+# Runtime dependencies for research, configuration and controlled testnet execution.
+pydantic==2.13.5
+pydantic-settings==2.15.0
