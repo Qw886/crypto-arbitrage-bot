@@ -22,8 +22,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 4637,
-      "sha256": "a9b279977b4b624e0f7bf8f447223fa4765d8a0d25df1e208d52fe40d722d538"
+      "bytes": 4640,
+      "sha256": "34f60e73a962e24ec6cfb260cafdf462853c2a2b7393eaadab1d18d99402f1e5"
     },
     {
       "path": "data/.gitkeep",
@@ -47,8 +47,8 @@
     },
     {
       "path": "docs/RELEASE_ACCEPTANCE.md",
-      "bytes": 1595,
-      "sha256": "0f1af3b40f360bcd24802475b11168160be2f2896a104a549922a0b16e163549"
+      "bytes": 1574,
+      "sha256": "b6f6436aec8e6f30ad2e317160b7cfe495c818b36cd4478c0b29e706ae7d49f5"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",

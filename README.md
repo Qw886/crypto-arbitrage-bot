@@ -76,4 +76,4 @@ if (Test-Path -LiteralPath $validationTarget) { throw 'Test target already exist
 
 全新 Windows / CPython 3.13.15 环境中，完整离线测试 **4594 项通过**，mypy 与 pip check 通过。
 测试代码静态检查通过；产品代码仍有已说明的 14 项提示。
-详情见 [验收结果](docs/RELEASE_ACCEPTANCE.md)。此结果不证明盈利，当前尚未上传。
+详情见 [验收结果](docs/RELEASE_ACCEPTANCE.md)。此结果不证明盈利，本版已公开发布。
